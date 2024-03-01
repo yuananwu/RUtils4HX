@@ -36,12 +36,6 @@ getSurvivalCutoff = function(df, tm, status, variable, method = 'km', rocPredTm 
   }
 }
 
-simplePlotKm = function(df, label, fea = 1){
-  fit <- survfit(as.formula(paste(label, fea, sep = '~')),data = df) 
-  ggplot = ggsurvplot(fit, data = df, pval = T, risk.table = T)
-  return(ggplot)
-}
-
 #===============================================参数模型(cox)相关
 #=============1 c-index计算
 # 获取c-index及其95CI
