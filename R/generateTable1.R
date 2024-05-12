@@ -64,14 +64,14 @@ compareGroupCont = function(strataVar, contVar){
       p = t.test(contVar~factor(strataVar),data=as.data.frame(cbind(contVar, strataVar)),var.equal=T)$p.value
       rst[['检验方法']] = '正态_两组_t检验'
       rst[['p值']] = p
-      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间不存在显著差异')
+      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无显著差异')
 
     }else{
       # Mann-Whitney U-Test (Wilcoxon秩和检验)
       p = wilcox.test(contVar~factor(strataVar),data=as.data.frame(cbind(contVar, strataVar)))$p.value
       rst[['检验方法']] = '非正态_两组_Mann-Whitney U检验'
       rst[['p值']] = p
-      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间不存在显著差异')
+      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无显著差异')
 
     }
   }else{
@@ -143,17 +143,17 @@ compareGroupCat = function(strataVar, catVar){
       p = fisher.test(tb)$p.value
       rst[['检验方法']] = 'fisher精确检验'
       rst[['p值']] = p
-      rst[['p值解释']] = ifelse(p < 0.05, '两个变量之间存在显著关联', '两个变量之间无关联')
+      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无差异')
     }else if(flag == '校正卡方'){
       p = chisq.test(tb, correct = T)$p.value
       rst[['检验方法']] = '校正卡方'
       rst[['p值']] = p
-      rst[['p值解释']] = ifelse(p < 0.05, '两个变量之间存在显著关联', '两个变量之间无关联')
+      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无差异')
     }else if(flag == '卡方'){
       p = chisq.test(tb, correct = F)$p.value
       rst[['检验方法']] = '卡方'
       rst[['p值']] = p
-      rst[['p值解释']] = ifelse(p < 0.05, '两个变量之间存在显著关联', '两个变量之间无关联')
+      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无差异')
     }else{
       NULL
     }
@@ -193,7 +193,7 @@ p4Show = function(pValueList, digitsNum = 3){
       rst = c(rst, '1')
     }else{
       rst = c(rst,
-              str_pad(str_replace(round(p, digitsNum), '0.', '.'), 1+digitsNum, 'right', '0'))
+              stringr::str_pad(str_replace(round(p, digitsNum), '0.', '.'), 1+digitsNum, 'right', '0'))
     }
   }
   return(rst)
@@ -256,7 +256,7 @@ getTable1 = function(df, allVarsList, catVarsList, strataVarName, pRound = 3){
     df[, i] = as.numeric(df[, i])
   }
 
-  tableOne <- CreateTableOne(vars = allVarsList,
+  tableOne <- tableone::CreateTableOne(vars = allVarsList,
                              factorVars = catVarsList,
                              strata = strataVarName,
                              data = df,

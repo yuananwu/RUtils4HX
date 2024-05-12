@@ -85,3 +85,19 @@ pointsZeroFill = function(num, pointsWidth = 1){
     return(paste(sp[1], str_pad(sp[2], pointsWidth, side = 'right', pad = '0'), sep = '.'))
     }
 }
+
+# 获取分层抽样的行索引
+# df: 数据源
+# strataCol： 需要分层的列名字
+# idCol： 数据的id， 每一行要确保不一致
+# sampleRatio： 抽样数据的比例， 默认是0.3
+# randomSeed： 随机数种子，为了抽样结果能复现，默认是42
+splitDataByStrata = function(df, strataCol, idCol, sampleRatio = 0.3, randomSeed = 42){
+  set.seed(randomSeed)
+  if (!exists(".Random.seed", envir = .GlobalEnv, inherits = FALSE)){
+    runif(1)
+  }
+  assign(".Random.seed", get(".Random.seed", envir = .GlobalEnv, inherits = FALSE), envir = .GlobalEnv)
+  sampleIdx = df %>% group_by_(strataCol) %>% slice_sample(prop = sampleRatio) %>% pull(idCol)
+  return(sampleIdx)
+  }
