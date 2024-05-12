@@ -143,17 +143,17 @@ compareGroupCat = function(strataVar, catVar){
       p = fisher.test(tb)$p.value
       rst[['检验方法']] = 'fisher精确检验'
       rst[['p值']] = p
-      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无差异')
+      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无显著差异')
     }else if(flag == '校正卡方'){
       p = chisq.test(tb, correct = T)$p.value
       rst[['检验方法']] = '校正卡方'
       rst[['p值']] = p
-      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无差异')
+      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无显著差异')
     }else if(flag == '卡方'){
       p = chisq.test(tb, correct = F)$p.value
       rst[['检验方法']] = '卡方'
       rst[['p值']] = p
-      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无差异')
+      rst[['p值解释']] = ifelse(p < 0.05, '组间存在显著差异', '组间无显著差异')
     }else{
       NULL
     }
